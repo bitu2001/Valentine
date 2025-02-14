@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Card</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f7d1d1, #f1e1e1);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #d24d57;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        /* Button Styles */
+        .btn {
+            font-size: 1.1rem;
+            padding: 15px 25px;
+            margin: 10px;
+            background-color: #d24d57;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 3D Effect when Yes is clicked */
+        .btn3d {
+            animation: yes3dAnimation 1s ease-in-out forwards;
+        }
+
+        @keyframes yes3dAnimation {
+            0% {
+                transform: rotateX(0) scale(1);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                transform: rotateX(20deg) scale(1.2);
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+            }
+            100% {
+                transform: rotateX(0) scale(1);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Enhanced 3D Effect on "I Knew You Did!" */
+        .yesText3d {
+            animation: text3dAnimation 2s ease-in-out forwards;
+        }
+
+        @keyframes text3dAnimation {
+            0% {
+                transform: scale(1) rotate(0deg);
+                letter-spacing: 2px;
+                color: #2ecc71;
+            }
+            50% {
+                transform: scale(1.5) rotate(5deg);
+                letter-spacing: 5px;
+                color: #1abc9c;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                letter-spacing: 2px;
+                color: #2ecc71;
+            }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 30px;
+                width: 85%;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            font-size: 3rem;
+            color: #e74c3c;
+            animation: floatHeart 6s ease-in-out infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-200px) scale(1.3);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Love Confetti Animation */
+        .confetti {
+            position: absolute;
+            top: -10%;
+            width: 10px;
+            height: 10px;
+            background-color: #f39c12;
+            opacity: 0.8;
+            animation: fallConfetti 2s infinite;
+        }
+
+        @keyframes fallConfetti {
+            0% {
+                top: -10%;
+                opacity: 0.8;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Do you love me?</h1>
+        <button class="btn" id="yesButton" onclick="loveMe()">Yes</button>
+        <button class="btn" id="noButton" onclick="moveButton()">No</button>
+        <div id="yesText" style="display:none; font-size: 1.5rem; font-weight: bold; margin-top: 20px;"></div>
+    </div>
+
+    <!-- Love animations -->
+    <div class="heart" style="top: 10%; left: 30%;">❤️</div>
+    <div class="heart" style="top: 20%; left: 70%;">❤️</div>
+    <div class="heart" style="top: 50%; left: 50%;">❤️</div>
+    <div class="heart" style="top: 70%; left: 40%;">❤️</div>
+    <div class="heart" style="top: 80%; left: 60%;">❤️</div>
+
+    <div class="confetti" style="left: 15%; animation-delay: 0s;"></div>
+    <div class="confetti" style="left: 40%; animation-delay: 0.5s;"></div>
+    <div class="confetti" style="left: 60%; animation-delay: 1s;"></div>
+    <div class="confetti" style="left: 85%; animation-delay: 1.5s;"></div>
+
+    <script>
+        // Variable to check if 'Yes' is clicked
+        let isYesClicked = false;
+
+        // Prevent window close until "Yes" is clicked
+        window.addEventListener("beforeunload", function(event) {
+            if (!isYesClicked) {
+                // Display a confirmation dialog
+                event.returnValue = "Are you sure you want to leave? You must click 'Yes' to continue.";
+            }
+        });
+
+        function loveMe() {
+            // Apply 3D animation to the Yes button
+            document.getElementById("yesButton").classList.add("btn3d");
+
+            // Hide the "No" button after Yes is clicked
+            document.getElementById("noButton").style.display = "none";
+
+            // Change the Yes button text and style
+            document.getElementById("yesButton").innerText = "I Knew You Did!";
+            document.getElementById("yesButton").style.backgroundColor = "#2ecc71";
+            document.getElementById("yesButton").style.cursor = "default";
+
+            // Display and animate the "I Knew You Did!" text
+            var yesText = document.getElementById("yesText");
+            yesText.style.display = "block";
+            yesText.classList.add("yesText3d");
+            yesText.innerText = "I Knew You Did!";
+
+            // Set the flag that "Yes" has been clicked
+            isYesClicked = true;
+        }
+
+        function moveButton() {
+            var noButton = document.getElementById("noButton");
+            var screenWidth = window.innerWidth;
+            var screenHeight = window.innerHeight;
+            var randomX = Math.random() * (screenWidth - noButton.offsetWidth);
+            var randomY = Math.random() * (screenHeight - noButton.offsetHeight);
+
+            // Apply random positions for the "No" button
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        }
+
+        // Ensuring the "No" button moves correctly even after being clicked
+        document.getElementById('noButton').style.position = 'absolute';
+    </script>
+</body>
+</html>
